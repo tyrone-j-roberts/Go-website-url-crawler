@@ -1,0 +1,7 @@
+# Unignore all with extensions
+*
+!/**/
+!*.*
+
+#Ignore output files
+*.csv
