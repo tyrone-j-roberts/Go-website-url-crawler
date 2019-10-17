@@ -3,3 +3,5 @@ A webcrawler/scraper written in go that crawls and creates a list of all interna
 
 # Running the crawler
 Once the program has been compiled using `go build` you can run the application in terminal/dos. When running you must provide a -url flag to define the address of the website you want to be crawled.
+
+Example: `./go-website-url-crawler -url=https://tyronejroberts.co.uk`
