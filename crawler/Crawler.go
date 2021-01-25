@@ -19,15 +19,18 @@ func NewCrawler(siteURL string) *Crawler {
 
 	siteURL = strings.Trim(siteURL, " ")
 	siteURL = strings.TrimRight(siteURL, "/")
+
 	var siteURLWWW string
 
 	var baseURL string
 
 	if strings.Index(siteURL, "http://") == 0 {
-		siteURL = strings.TrimLeft(siteURL, "http://")
+		siteURL = strings.Replace(siteURL, "https://", "", 1)
 	} else if strings.Index(siteURL, "https://") == 0 {
-		siteURL = strings.TrimLeft(siteURL, "https://")
+		siteURL = strings.Replace(siteURL, "https://", "", 1)
 	}
+
+	fmt.Printf("URL %s \n", siteURL)
 
 	if strings.Contains(siteURL, "www.") {
 		siteURLWWW = siteURL
@@ -107,7 +110,8 @@ func (c *Crawler) crawlURL(url string) {
 	resp, err := http.Get(url)
 
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	c.scrapeInternalUrls(resp.Body)
@@ -157,14 +161,18 @@ func (c *Crawler) scrapeInternalUrls(data io.Reader) error {
 			continue
 		}
 
+		if strings.Contains(href, "tel:") {
+			continue
+		}
+
 		if strings.Index(href, "http") == 0 {
 
 			if !strings.Contains(href, "://"+c.SiteURL) && !strings.Contains(href, "://"+c.SiteURLWWW) {
 				continue
 			}
 
-			href = strings.TrimLeft(href, "http://")
-			href = strings.TrimLeft(href, "https://")
+			href = strings.Replace(href, "http://", "", 1)
+			href = strings.Replace(href, "https://", "", 1)
 			href = strings.Replace(href, c.SiteURL, "", 1)
 			href = strings.Replace(href, c.SiteURLWWW, "", 1)
 		}
